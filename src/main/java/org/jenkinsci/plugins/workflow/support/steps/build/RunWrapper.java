@@ -258,6 +258,28 @@ public final class RunWrapper implements Serializable {
         return upstreams;
     }
 
+    @Whitelisted
+    public List<Cause> getBuildCauses() throws AbortException {
+        return build().getCauses() == null ? Collections.emptyList() : Collections.unmodifiableList(build().getCauses
+                ());
+//        List<Cause> causes = new ArrayList<>();
+//        for (Cause c: build().getCauses()) {
+//            causes.add(c);
+//        }
+//        return causes;
+    }
+
+    @Whitelisted
+    public List<Cause> getBuildCause(Class clazz) throws AbortException {
+        List<Cause> causes = new ArrayList<>();
+        for (Cause cause: build().getCauses()) {
+            if (clazz.isInstance(cause)) {
+                causes.add(cause);
+            }
+        }
+        return causes;
+    }
+
     @Nonnull
     private List<RunWrapper> upstreamCauseToRunWrappers(@Nonnull Cause.UpstreamCause cause) {
         List<RunWrapper> upstreams = new ArrayList<>();
